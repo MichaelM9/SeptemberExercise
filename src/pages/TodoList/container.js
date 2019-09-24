@@ -8,6 +8,7 @@ const TodoList = (Wrapped) =>
       this.state = {
         todoListItems: [],
         isLoading: true,
+        value:'',
       };
     }
 
@@ -17,6 +18,9 @@ const TodoList = (Wrapped) =>
 
     retrieveTodosForDisplay = () => {
       retrieveTodoList().then((todoListItems) => {
+        todoListItems.sort(function(a, b){
+          return a.id - b.id;
+        });
         this.setState({ todoListItems, isLoading: false });
       });
     };
@@ -28,9 +32,21 @@ const TodoList = (Wrapped) =>
       });
     };
 
+    handleChange(event) {
+      this.setState({value: event.target.value});
+    };
+
+    handleTaskSubmission(event) {
+      //alert('New Todo Added' + this.state.value);
+      event.preventDefault();
+    };
+
     render() {
       return <Wrapped 
         deleteItemFromList={this.deleteItemFromList}
+        retrieveTodosForDisplay={this.retrieveTodosForDisplay}
+        handleChange={() => this.handleChange}
+        handleTaskSubmission={this.handleTaskSubmission}
         {...this.state} 
       />;
     }
